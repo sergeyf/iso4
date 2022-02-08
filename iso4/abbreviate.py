@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, csv, json, unicodedata, string, nltk
+import os, csv, json, unicodedata, string
 import regex as re
 from nltk.stem.wordnet import WordNetLemmatizer
 
@@ -138,7 +138,7 @@ def abbreviate(title, periods=True, disambiguation_langs=set()):
 
 
 LTWA = {}
-LTWA_VERSION = "20170914"
+LTWA_VERSION = "20210702"
 
 NOT_ABBREVIATED = "n.a."
 
@@ -157,7 +157,7 @@ LOWERCASE, UPPERCASE, TITLECASE = 'lut'
 
 def __initialize_ltwa():
     global LTWA, CONFLICT_MAP, MULTI_WORD_TERMS, STOPWORDS, KEEP_AS_LAST, TOKENIZER_REGEX
-    json_filepath = os.path.join(os.path.dirname(__file__), "LTWA_{}.json".format(LTWA_VERSION))
+    json_filepath = os.path.join(os.path.dirname(__file__), "ltwa_{}.json".format(LTWA_VERSION))
     try:
         # Read JSON.
         with open(json_filepath,'r') as inf:
@@ -167,11 +167,11 @@ def __initialize_ltwa():
             CONFLICT_MAP = inf_json[LABEL_CONFLICT]
     except:
         # Create JSON from TSV.
-        tsv_filepath = os.path.join(os.path.dirname(__file__), "LTWA_{}.tsv".format(LTWA_VERSION))
-        with open(tsv_filepath,'r') as inf:
+        csv_filepath = os.path.join(os.path.dirname(__file__), "ltwa_{}.csv".format(LTWA_VERSION))
+        with open(csv_filepath,'r') as inf:
             # Make list of conflict words to gather information about on pass 2
             conflict_words = set()
-            tsv = csv.reader(inf, delimiter='\t')
+            tsv = csv.reader(inf, delimiter=';')
             # Build LTWA dict
             for line in tsv:
                 word, abbr, langs = line
